@@ -9,6 +9,8 @@ module.exports = {
     alias: {
       '@/components': path.resolve(__dirname, 'src/components'),
       '@/api': path.resolve(__dirname, 'src/api'),
+      '@/query': path.resolve(__dirname, 'src/query'),
+      '@/assets': path.resolve(__dirname, 'src/assets'),
     },
   },
   devServer: {
