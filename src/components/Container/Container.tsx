@@ -1,7 +1,8 @@
+import { ReactNode } from 'react';
 import { Box } from './style';
 
 interface Props {
-  children: JSX.Element;
+  children: ReactNode;
 }
 
 function Container({ children }: Props) {

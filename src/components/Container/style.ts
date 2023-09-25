@@ -4,6 +4,7 @@ const Box = styled.main`
   display: flex;
   justify-content: center;
   align-items: center;
+  flex-direction: column;
   margin: auto;
   width: 500px;
   height: 650px;

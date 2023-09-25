@@ -2,6 +2,7 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import Header from '@/components/Header';
 import Container from '@/components/Container';
 import GlobalStyle from './GlobalStyle';
+import Content from './components/Content';
 
 function App() {
   const queryClient = new QueryClient({
@@ -21,6 +22,7 @@ function App() {
       <GlobalStyle />
       <Container>
         <Header />
+        <Content />
       </Container>
     </QueryClientProvider>
   );
