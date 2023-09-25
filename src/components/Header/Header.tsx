@@ -6,6 +6,7 @@ function Header() {
     <Container>
       <Img src={img} />
       <h2>Exchange Rate Calculator</h2>
+      <p>박민용의 환율 계산기</p>
     </Container>
   );
 }

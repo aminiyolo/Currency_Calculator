@@ -1,13 +1,14 @@
 import Currency from './Currency';
 import SwapController from './SwapController';
+import { Container } from './style';
 
 function Content() {
   return (
-    <div>
+    <Container>
       <Currency data-id='base_currency' />
       <SwapController />
       <Currency data-id='target_currency' />
-    </div>
+    </Container>
   );
 }
 

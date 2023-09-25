@@ -5,11 +5,11 @@ const Box = styled.main`
   justify-content: center;
   align-items: center;
   flex-direction: column;
-  margin: auto;
+  margin: 8vh auto;
   width: 500px;
   height: 650px;
-  margin-top: 50px;
   background-color: #f2f2f2;
+  border-radius: 15px;
 `;
 
 export { Box };
