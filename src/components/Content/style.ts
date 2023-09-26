@@ -17,6 +17,19 @@ const Select = styled.div`
   width: 50px;
   display: flex;
   cursor: pointer;
+
+  .code_name {
+    line-height: -3px;
+  }
+
+  .arrow {
+    transform: rotate(0deg);
+    transition: all 200ms ease-in;
+  }
+
+  .arrow.open {
+    transform: rotate(180deg);
+  }
 `;
 
 const Input = styled.input`
