@@ -2,7 +2,7 @@ import axios from 'axios';
 
 interface CurrencyListResponse {
   base_code: string;
-  conversion_rates: { string: number };
+  conversion_rates: Array<{ string: number }>;
   documentation: string;
   result: string;
   terms_of_use: string;
