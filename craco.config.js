@@ -1,6 +1,17 @@
 const path = require('path');
 
 module.exports = {
+  babel: {
+    presets: [
+      // emotion/react를 사용함에 있어 각각의 파일에 jsx pragma를 사용하지 않기 위해 하는 설정
+      '@emotion/babel-preset-css-prop',
+      // runtime을 automatic으로 바꾸어 import 'react'를 하지 않기 위한 설정
+      [
+        '@babel/preset-react',
+        { runtime: 'automatic', importSource: '@emotion/react' },
+      ],
+    ],
+  },
   webpack: {
     configure: (webpackConfig, { env, paths }) => {
       webpackConfig.entry = './src/index.tsx';

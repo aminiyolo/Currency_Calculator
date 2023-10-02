@@ -1,4 +1,4 @@
-import styled from 'styled-components';
+import styled from '@emotion/styled';
 
 const Container = styled.div`
   width: 350px;
@@ -20,6 +20,9 @@ const Select = styled.div`
 
   .code_name {
     line-height: -3px;
+    width: 30px;
+    text-align: center;
+    position: relative;
   }
 
   .arrow {

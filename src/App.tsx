@@ -3,6 +3,7 @@ import Header from '@/components/Header';
 import Container from '@/components/Container';
 import GlobalStyle from './GlobalStyle';
 import Content from './components/Content';
+import { Global } from '@emotion/react';
 
 function App() {
   const queryClient = new QueryClient({
@@ -19,7 +20,7 @@ function App() {
 
   return (
     <QueryClientProvider client={queryClient}>
-      <GlobalStyle />
+      <Global styles={GlobalStyle} />
       <Container>
         <Header />
         <Content />
