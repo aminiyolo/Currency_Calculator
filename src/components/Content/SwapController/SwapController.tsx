@@ -1,9 +1,15 @@
 import { Container } from './style';
 
-function SwapController() {
+interface Props {
+  handleSwap: () => void;
+}
+
+function SwapController({ handleSwap }: Props) {
   return (
     <Container>
-      <button className='swap'>SWAP</button>
+      <button onClick={handleSwap} className='swap'>
+        SWAP
+      </button>
       <div className='rate_info'>1USD = 0.800KRW</div>
     </Container>
   );

@@ -27,7 +27,7 @@ const Select = styled.div`
 
   .arrow {
     transform: rotate(0deg);
-    transition: all 200ms ease-in;
+    transition: all 150ms ease-in;
   }
 
   .arrow.open {

@@ -1,8 +1,9 @@
+import { ChangeEvent, MouseEvent, useCallback, useMemo, useState } from 'react';
+
 import Currency from './Currency';
 import SwapController from './SwapController';
 import { Container } from './style';
 import useGetCurrencyList from '@/query/useGetCurrencyList';
-import { ChangeEvent, useCallback, useMemo, useRef, useState } from 'react';
 import useGetIPCountry from '@/query/useGetIPCountry';
 
 export type CurrencyType = 'base' | 'target';
@@ -18,10 +19,14 @@ function Content() {
 
   // 접속한 IP 주소의 country 값을 가져와 통화 목록에서 앞 두글자와 같은 통화코드를 가져옴
   // ex) IpCountry: KR, Currency: KRW
-  const initialCurrency =
-    currencyList?.find((currency) => currency.substring(0, 2) === country) ??
-    'USD';
+  const initialCurrency = useMemo(
+    () =>
+      currencyList?.find((currency) => currency.substring(0, 2) === country) ??
+      'USD',
+    [country, currencyList],
+  );
 
+  // 통화 숫자 금액 변경
   const handleChangeCurrency = useCallback(
     (e: ChangeEvent<HTMLInputElement>, type: CurrencyType) => {
       const value = Number(e.target.value.replace(/[^0-9]/g, ''));
@@ -30,6 +35,16 @@ function Content() {
     [],
   );
 
+  // 통화 단위 변경
+  const handleSelect = useCallback(
+    (e: MouseEvent<HTMLUListElement>, type: CurrencyType) => {
+      const newSelected = (e.target as HTMLUListElement).innerHTML;
+      type === 'base' ? setBase(newSelected) : setTarget(newSelected);
+    },
+    [],
+  );
+
+  // 베이스 통화와 변경하고자 하는 통화 단위 서로 위치 변경
   const handleSwap = useCallback(() => {
     // base 통화와 target 통화 변경
     setBase(target);
@@ -41,18 +56,22 @@ function Content() {
     <Container>
       <Currency
         type='base'
+        notAllowed={target}
         list={currencyList}
-        selected={base || initialCurrency}
         amount={baseCurrency}
+        selected={base || initialCurrency}
         handleChange={handleChangeCurrency}
+        handleSelect={handleSelect}
       />
-      <SwapController />
+      <SwapController handleSwap={handleSwap} />
       <Currency
         type='target'
+        notAllowed={base || initialCurrency}
         list={currencyList}
-        selected={target}
         amount={targetCurrency}
+        selected={target}
         handleChange={handleChangeCurrency}
+        handleSelect={handleSelect}
       />
     </Container>
   );
