@@ -1,8 +1,8 @@
 import axios from 'axios';
 
 export interface ExchangeRateApiParams {
-  base: string;
-  target: string;
+  baseCurrency: string | null;
+  targetCurrency: string | null;
 }
 
 interface ExchangeRateResponse {
@@ -20,9 +20,12 @@ interface ExchangeRateResponse {
 
 const API_KEY = process.env.REACT_APP_EXCHANGE_RATE_KEY;
 
-const getExchangeRate = async ({ base, target }: ExchangeRateApiParams) => {
+const getExchangeRate = async ({
+  baseCurrency,
+  targetCurrency,
+}: ExchangeRateApiParams) => {
   const response = await axios.get<ExchangeRateResponse>(
-    `https://v6.exchangerate-api.com/v6/${API_KEY}/pair/${base}/${target}`,
+    `https://v6.exchangerate-api.com/v6/${API_KEY}/pair/${baseCurrency}/${targetCurrency}`,
   );
 
   return response.data;

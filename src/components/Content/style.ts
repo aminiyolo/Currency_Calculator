@@ -11,6 +11,11 @@ const CurrencyContainer = styled.div`
   background-color: #fff;
   padding: 20px;
   border-radius: 15px;
+
+  .spinner_wrapper {
+    position: relative;
+    right: 3px;
+  }
 `;
 
 const Select = styled.div`

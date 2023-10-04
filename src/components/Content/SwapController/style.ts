@@ -16,9 +16,21 @@ const Container = styled.div`
     cursor: pointer;
   }
 
+  .disabled {
+    background-color: gray;
+    border-color: gray;
+    cursor: not-allowed;
+  }
+
   .rate_info {
     font-size: 13px;
     color: gray;
+  }
+
+  .spinner_wrapper {
+    position: relative;
+    top: 10px;
+    right: 8px;
   }
 `;
 

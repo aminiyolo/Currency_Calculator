@@ -8,6 +8,7 @@ import { CurrencyType } from '../Content';
 import { ulStyle, Li } from './style';
 import Portal from '@/components/Portal';
 import useOutsideClick from '@/hook/useOutsideClick';
+import Spinner from '@/components/Spinner';
 
 interface Props {
   type: CurrencyType;
@@ -15,6 +16,7 @@ interface Props {
   list: string[];
   selected: string | null;
   amount: number;
+  loading?: boolean;
   handleChange: (e: ChangeEvent<HTMLInputElement>, type: CurrencyType) => void;
   handleSelect: (e: MouseEvent<HTMLUListElement>, type: CurrencyType) => void;
 }
@@ -25,6 +27,7 @@ function Currency({
   list,
   selected,
   amount,
+  loading = false,
   handleChange,
   handleSelect,
 }: Props) {
@@ -37,6 +40,7 @@ function Currency({
   const handleOpen = useCallback(() => {
     if (!selectRef.current) return;
     const { top, left, width } = selectRef.current?.getBoundingClientRect();
+    // 통화 리스트를 포탈로 띄우기 위해 top, left, width를 구해서 저장
     setPosition({ top: top + 7.5, left: left - 5, width: width });
     setOpen((prev) => !prev);
   }, []);
@@ -54,12 +58,11 @@ function Currency({
   );
 
   useOutsideClick(ulRef, () => setOpen(false));
-
   return (
     <CurrencyContainer>
       <Select ref={selectRef} onClick={handleOpen}>
         <div className='code_name'>
-          <div>{selected ?? '-'}</div>
+          {loading && !selected ? <Spinner /> : <div>{selected ?? '-'}</div>}
           {open && (
             <Portal>
               <ul
@@ -76,7 +79,18 @@ function Currency({
           <RiArrowDropDownFill size={18} className={cn('arrow', { open })} />
         </div>
       </Select>
-      <Input min={0} value={amount} onChange={(e) => handleChange(e, type)} />
+      {loading && selected && type === 'target' ? (
+        <div className='spinner_wrapper'>
+          <Spinner />
+        </div>
+      ) : (
+        <Input
+          min={0}
+          value={amount}
+          disabled={loading}
+          onChange={(e) => handleChange(e, type)}
+        />
+      )}
     </CurrencyContainer>
   );
 }

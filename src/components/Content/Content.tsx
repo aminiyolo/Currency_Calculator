@@ -5,17 +5,26 @@ import SwapController from './SwapController';
 import { Container } from './style';
 import useGetCurrencyList from '@/query/useGetCurrencyList';
 import useGetIPCountry from '@/query/useGetIPCountry';
+import useGetExchangeRate from '@/query/useGetExchangeRate';
+import useMount from '@/hook/useMount';
+import { CurrencyProps } from '../Controller/Controller';
 
 export type CurrencyType = 'base' | 'target';
 
-function Content() {
-  const [baseCurrency, setBaseCurrency] = useState<number>(0);
-  const [targetCurrency, setTargetCurrency] = useState<number>(0);
-  const [base, setBase] = useState<string | null>(null);
-  const [target, setTarget] = useState<string | null>(null);
+interface Props extends CurrencyProps {}
+
+function Content({
+  baseCurrency,
+  targetCurrency,
+  setBaseCurrency,
+  setTargetCurrency,
+}: Props) {
+  const [baseAmount, setBaseAmount] = useState<number>(0);
+  const [targetAmount, setTargetAmount] = useState<number>(0);
 
   const { data: country } = useGetIPCountry();
   const { data: currencyList } = useGetCurrencyList();
+  const { data: rate } = useGetExchangeRate({ baseCurrency, targetCurrency });
 
   // 접속한 IP 주소의 country 값을 가져와 통화 목록에서 앞 두글자와 같은 통화코드를 가져옴
   // ex) IpCountry: KR, Currency: KRW
@@ -30,7 +39,7 @@ function Content() {
   const handleChangeCurrency = useCallback(
     (e: ChangeEvent<HTMLInputElement>, type: CurrencyType) => {
       const value = Number(e.target.value.replace(/[^0-9]/g, ''));
-      type === 'base' ? setBaseCurrency(value) : setTargetCurrency(value);
+      type === 'base' ? setBaseAmount(value) : setTargetAmount(value);
     },
     [],
   );
@@ -39,37 +48,54 @@ function Content() {
   const handleSelect = useCallback(
     (e: MouseEvent<HTMLUListElement>, type: CurrencyType) => {
       const newSelected = (e.target as HTMLUListElement).innerHTML;
-      type === 'base' ? setBase(newSelected) : setTarget(newSelected);
+      type === 'base'
+        ? setBaseCurrency(newSelected)
+        : setTargetCurrency(newSelected);
     },
-    [],
+    [setBaseCurrency, setTargetCurrency],
   );
 
   // 베이스 통화와 변경하고자 하는 통화 단위 서로 위치 변경
   const handleSwap = useCallback(() => {
     // base 통화와 target 통화 변경
-    setBase(target);
-    setTarget(base || initialCurrency);
-  }, [base, initialCurrency, target]);
+    setBaseCurrency(targetCurrency);
+    setTargetCurrency(baseCurrency || initialCurrency);
+  }, [
+    baseCurrency,
+    targetCurrency,
+    initialCurrency,
+    setBaseCurrency,
+    setTargetCurrency,
+  ]);
+
+  useMount(() => {
+    setBaseCurrency(initialCurrency);
+  });
 
   if (!currencyList) return null;
   return (
     <Container>
       <Currency
         type='base'
-        notAllowed={target}
+        notAllowed={targetCurrency}
         list={currencyList}
-        amount={baseCurrency}
-        selected={base || initialCurrency}
+        amount={baseAmount}
+        selected={baseCurrency}
         handleChange={handleChangeCurrency}
         handleSelect={handleSelect}
       />
-      <SwapController handleSwap={handleSwap} />
+      <SwapController
+        rate={rate}
+        baseCurrency={baseCurrency}
+        targetCurrency={targetCurrency}
+        handleSwap={handleSwap}
+      />
       <Currency
         type='target'
-        notAllowed={base || initialCurrency}
+        notAllowed={baseCurrency}
         list={currencyList}
-        amount={targetCurrency}
-        selected={target}
+        amount={targetAmount}
+        selected={targetCurrency}
         handleChange={handleChangeCurrency}
         handleSelect={handleSelect}
       />
