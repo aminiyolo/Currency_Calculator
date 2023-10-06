@@ -73,8 +73,9 @@ function Currency({
     [],
   );
 
-  const disabled = loading || (type === 'target' && amount === 0);
-  const isLoading = loading && selected && type === 'target';
+  const isTarget = type === 'target';
+  const disabled = loading || (!selected && isTarget && amount === 0);
+  const isLoading = loading && selected && isTarget;
 
   return (
     <CurrencyContainer>
