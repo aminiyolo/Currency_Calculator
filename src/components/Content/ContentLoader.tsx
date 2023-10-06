@@ -3,14 +3,18 @@ import Currency from './Currency';
 import SwapController from './SwapController';
 import { CurrencyProps } from '../Controller/Controller';
 
-function ContentLoader({ baseCurrency, targetCurrency }: CurrencyProps) {
+function ContentLoader({
+  baseCurrency,
+  targetCurrency,
+  baseAmount,
+}: CurrencyProps) {
   return (
     <Container>
       <Currency
         type='base'
         notAllowed={''}
         list={[]}
-        amount={0}
+        amount={baseAmount}
         loading={true}
         selected={baseCurrency}
         handleChange={() => {}}

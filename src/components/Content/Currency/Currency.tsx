@@ -36,14 +36,30 @@ function Currency({
   const selectRef = useRef<HTMLDivElement>(null);
   const ulRef = useRef<HTMLUListElement>(null);
 
+  // 통화 목록 리스트 외부를 누를 경우 목록 창 닫기
+  useOutsideClick(ulRef, () => setOpen(false));
+
   // 통화 목록 오픈
   const handleOpen = useCallback(() => {
-    if (!selectRef.current) return;
+    if (!selectRef.current || open) return;
     const { top, left, width } = selectRef.current?.getBoundingClientRect();
-    // 통화 리스트를 포탈로 띄우기 위해 top, left, width를 구해서 저장
-    setPosition({ top: top + 7.5, left: left - 5, width: width });
+    // 통화 리스트를 포탈로 띄우기 위해 Select 박스의 top, left, width를 구해서 위치 저장
+    setPosition({ top: top + 7.5, left: left - 5, width });
     setOpen((prev) => !prev);
-  }, []);
+  }, [open]);
+
+  // 통화 목록 선택
+  const handleChoose = useCallback(
+    (e: MouseEvent<HTMLUListElement>) => {
+      setOpen(false);
+      // 통화 목록 리스트 Portal을 닫고 handleSelect 함수가 실행되게 하기 위하여
+      // setTimeout 함수를 사용하여 동기적 실행
+      setTimeout(() => {
+        handleSelect(e, type);
+      }, 0);
+    },
+    [handleSelect, type],
+  );
 
   // 선택 가능한 통화 목록 필터
   const makeAvailableList = useCallback(
@@ -51,13 +67,15 @@ function Currency({
     [notAllowed, selected],
   );
 
-  // 통화 목록 Element 만들기
+  // 통화 목록 li Element 만들기
   const makeList = useCallback(
     (name: string) => <Li key={name}>{name}</Li>,
     [],
   );
 
-  useOutsideClick(ulRef, () => setOpen(false));
+  const disabled = loading || (type === 'target' && amount === 0);
+  const isLoading = loading && selected && type === 'target';
+
   return (
     <CurrencyContainer>
       <Select ref={selectRef} onClick={handleOpen}>
@@ -65,29 +83,23 @@ function Currency({
           {loading && !selected ? <Spinner /> : <div>{selected ?? '-'}</div>}
           {open && (
             <Portal>
-              <ul
-                ref={ulRef}
-                css={[position, ulStyle]}
-                onClick={(e) => handleSelect(e, type)}
-              >
+              <ul ref={ulRef} css={[position, ulStyle]} onClick={handleChoose}>
                 {list.filter(makeAvailableList).map(makeList)}
               </ul>
             </Portal>
           )}
         </div>
-        <div>
-          <RiArrowDropDownFill size={18} className={cn('arrow', { open })} />
-        </div>
+        <RiArrowDropDownFill size={18} className={cn('arrow', { open })} />
       </Select>
-      {loading && selected && type === 'target' ? (
+      {isLoading ? (
         <div className='spinner_wrapper'>
           <Spinner />
         </div>
       ) : (
         <Input
           min={0}
-          value={amount}
-          disabled={loading}
+          disabled={disabled}
+          value={amount.toLocaleString()}
           onChange={(e) => handleChange(e, type)}
         />
       )}

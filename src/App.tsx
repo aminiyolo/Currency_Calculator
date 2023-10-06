@@ -5,18 +5,20 @@ import GlobalStyle from './GlobalStyle';
 import { Global } from '@emotion/react';
 import Controller from './components/Controller';
 
+const defaultOptions = {
+  queries: {
+    refetchOnWindowFocus: false,
+    cacheTime: 60 * 10 * 1000,
+    staleTime: 60 * 10 * 1000,
+    useErrorBoundary: true,
+    suspense: true,
+    retry: 1,
+  },
+};
+
 function App() {
   const queryClient = new QueryClient({
-    defaultOptions: {
-      queries: {
-        refetchOnWindowFocus: false,
-        cacheTime: 60 * 10 * 1000,
-        staleTime: 60 * 10 * 1000,
-        useErrorBoundary: true,
-        suspense: true,
-        retry: 1,
-      },
-    },
+    defaultOptions,
   });
 
   return (
