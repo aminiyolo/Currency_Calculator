@@ -10,9 +10,10 @@ interface ThemeProviderProps {
 }
 
 const ThemeProvider = ({ theme, children }: ThemeProviderProps) => {
+  const THEME = mode[theme];
   return (
-    <Provider theme={mode[theme]}>
-      <Global styles={GlobalStyle(mode[theme])} />
+    <Provider theme={THEME}>
+      <Global styles={GlobalStyle(THEME)} />
       {children}
     </Provider>
   );
