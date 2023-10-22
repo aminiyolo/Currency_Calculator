@@ -1,9 +1,9 @@
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import Header from '@/components/Header';
 import Container from '@/components/Container';
-import GlobalStyle from './GlobalStyle';
-import { Global } from '@emotion/react';
 import Controller from './components/Controller';
+import useTheme from './hook/useTheme';
+import ThemeProvider from './components/ThemeProvider';
 
 const defaultOptions = {
   queries: {
@@ -17,17 +17,19 @@ const defaultOptions = {
 };
 
 function App() {
+  const [theme, toggleTheme] = useTheme();
   const queryClient = new QueryClient({
     defaultOptions,
   });
 
   return (
     <QueryClientProvider client={queryClient}>
-      <Global styles={GlobalStyle} />
-      <Container>
-        <Header />
-        <Controller />
-      </Container>
+      <ThemeProvider theme={theme}>
+        <Container toggleTheme={toggleTheme}>
+          <Header />
+          <Controller />
+        </Container>
+      </ThemeProvider>
     </QueryClientProvider>
   );
 }

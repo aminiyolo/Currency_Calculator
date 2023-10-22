@@ -3,10 +3,6 @@ import styled from '@emotion/styled';
 const Container = styled.header`
   text-align: center;
   margin-bottom: 50px;
-
-  p {
-    color: grey;
-  }
 `;
 
 const Img = styled.img`

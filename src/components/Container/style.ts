@@ -8,8 +8,18 @@ const Box = styled.main`
   margin: 8vh auto;
   width: 500px;
   height: 650px;
-  background-color: #f2f2f2;
   border-radius: 15px;
 `;
 
-export { Box };
+const ThemeButton = styled.button`
+  position: fixed;
+  right: 3rem;
+  top: 6rem;
+  border-radius: 24px;
+  padding: 10px 16px;
+  cursor: pointer;
+  outline: none;
+  border: 1px solid lightgray;
+`;
+
+export { Box, ThemeButton };
